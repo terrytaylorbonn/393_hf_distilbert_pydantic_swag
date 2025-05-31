@@ -1,8 +1,9 @@
 # 393_hf_distilbert_pydantic_swag/main.py
 # https://chatgpt.com/c/683892ad-c92c-800c-b771-ed6ddec01670
 
-# GPT5 #############################################
 
+
+# GPT5
 from fastapi import FastAPI
 from pydantic import BaseModel
 from transformers import pipeline
@@ -32,7 +33,7 @@ def get_sentiment(message: ChatMessage):
     result = classifier(message.content)[0]
     return SentimentResponse(sentiment=result["label"], score=result["score"])
 
-# GPT6 #############################################
+# GPT6
 
 # Add to imports at the top
 from typing import Optional
@@ -62,27 +63,9 @@ def summarize_text(request: SummarizationRequest):
     return SummaryResponse(summary=result[0]["summary_text"])
 
 
-# GPT30 #############################################
+# import os
+# from pathlib import Path
 
-
-# Load T5 translation model (no sentencepiece needed)
-translator = pipeline("translation_en_to_de", model="t5-small")
-
-# Pydantic models
-class TranslationRequest(BaseModel):
-    text: str
-
-class TranslationResponse(BaseModel):
-    translated_text: str
-
-# # FastAPI app
-# app = FastAPI(
-#     title="Translation API",
-#     description="Translate English to German using t5-small",
-#     version="1.0"
-# )
-
-@app.post("/chat/translate", response_model=TranslationResponse, tags=["Chatbot"])
-def translate_text(request: TranslationRequest):
-    result = translator(request.text)
-    return TranslationResponse(translated_text=result[0]["translation_text"])
+# cache_dir = Path.home() / ".cache" / "huggingface" / "hub"
+# for path in cache_dir.rglob("*bart-large-cnn*"):
+#     print(path)
